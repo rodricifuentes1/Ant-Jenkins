@@ -6,6 +6,7 @@
 
 	<property name="src.dir" location="src" />
 	<property name="build.dir" location="bin" />
+	<property name="jar.dir" location="dist" />
 
 	<!-- Variables used for JUnit testing -->
 	<property name="test.dir" location="src" />
@@ -30,12 +31,14 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 		<delete dir="${test.report.dir}" />
+		<delete dir="${jar.dir}" />
 	</target>
 
 	<!-- Creates the build, docs and dist directory -->
 	<target name="makedir">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${test.report.dir}" />
+		<mkdir dir="${jar.dir}" />
 	</target>
 
 	<!-- Compiles the java code (including the usage of library for JUnit -->
@@ -62,7 +65,16 @@
 		</junit>
 	</target>
 
-	<target name="main" depends="compile, junit">
+	<target name="build-jar" depends="junit">
+	<jar destfile="${jar.dir}/calc.jar"
+	     basedir="${build.dir}">
+	     <manifest>
+	      <attribute name="Main-Class" value="math.MyMath"/>
+	     </manifest>
+	</jar>
+	</target>
+	
+	<target name="main" depends="compile, junit, build-jar">
 		<description>Main target</description>
 	</target>
 
